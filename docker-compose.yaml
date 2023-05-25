@@ -1,0 +1,17 @@
+services:
+    php-fpm:
+        build:
+          context: .
+          dockerfile: docker/fpm/Dockerfile
+        volumes:
+          - ./:/usr/src/app
+    nginx:
+        build:
+          context: .
+          dockerfile: docker/nginx/Dockerfile
+        volumes:
+          - ./:/usr/src/app
+        ports:
+          - 4501:80
+        depends_on:
+          - php-fpm
