@@ -27,7 +27,6 @@ class CoinGateCurrencyRateComparatorTest extends TestCase
         unset($this->httpClient, $this->rateComparator);
     }
 
-
     public function testCompareReturnFloat(): void
     {
         $mockResponse = new MockResponse(json_encode(979094.38));
