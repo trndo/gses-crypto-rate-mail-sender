@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace src\Utils\Subscription\DataProvider;
+namespace App\Tests\Subscription\DataProvider;
 
 use App\Utils\FileSystem\FileReader;
 use App\Utils\Subscription\DataProvider\TxtDataProvider;

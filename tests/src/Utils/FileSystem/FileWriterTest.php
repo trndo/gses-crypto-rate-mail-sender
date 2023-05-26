@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace src\Utils\FileSystem;
+namespace App\Tests\FileSystem;
 
 use App\Utils\FileSystem\FileWriter;
 use PHPUnit\Framework\TestCase;

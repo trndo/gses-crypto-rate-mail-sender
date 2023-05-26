@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace src\Utils\Subscription\DataPersister;
+namespace App\Tests\Subscription\DataPersister;
 
 use App\Utils\FileSystem\FileWriter;
 use App\Utils\Subscription\DataProvider\DataProviderInterface;

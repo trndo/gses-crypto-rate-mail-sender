@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace src\Utils\FileSystem;
+namespace App\Tests\Utils\FileSystem;
 
 use App\Utils\FileSystem\FileReader;
 use PHPUnit\Framework\TestCase;
@@ -12,6 +12,7 @@ class FileReaderTest extends TestCase
 {
     private const TEST_DATA_STRING_FROM_FILE = 'sample_data_string';
     private const TEST_DATA_DIRECTORY = 'tests/data';
+
     private FileReader $fileReader;
 
     private ?Filesystem $fileSystem;
