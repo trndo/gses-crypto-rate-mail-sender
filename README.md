@@ -12,6 +12,7 @@ This service has ability:
 1. Copy `.env` to `.env.local`. You can use variables without any changes to work by default.
 2. Install Docker and Docker Compose.
 3. Run `docker-compose up -d`
+4. Run `docker-compose exec php-fpm composer install` to install dependencies
 4. Project will be available on http://localhost:4501 by default.
 5. Api documentation will be available on http://localhost:4501/api/doc 
 The swagger documentation was updated from 2 to 3 version and adopted with `NelmioApiDocBundle`
@@ -24,4 +25,5 @@ any message sent to it to display in a web interface. UI is available on http://
 3. `/api/sendEmails` - send the current rate to all subscribed users. Project read subscribed emails from `system/emails.txt` and send emails to with current rate to them
 
 # Tests
-To run tests you can use command `docker-compose exec php-fpm bin/phpunit`
+1. Copy `.env.test` to `.env.test.local`. You can use variables without any changes to work by default.
+2. To run tests you can use command `docker-compose exec php-fpm bin/phpunit`
