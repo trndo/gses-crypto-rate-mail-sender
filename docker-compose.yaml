@@ -15,3 +15,8 @@ services:
           - 4501:80
         depends_on:
           - php-fpm
+    mailer:
+        image: schickling/mailcatcher
+        ports:
+          - 1025
+          - 32770:1080

@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace App\Tests\Subscription\DataProvider;
 
 use App\Utils\FileSystem\FileReader;
-use App\Utils\Subscription\DataProvider\TxtDataProvider;
+use App\Utils\Subscription\DataProvider\TxtSubscriptionDataProvider;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-class TxtDataProviderTest extends TestCase
+class TxtSubscriptionDataProviderTest extends TestCase
 {
-    private const STRING_DATA_FROM_FILES = 'email1@example.com,email2@example.com,email3@example.com';
     private const EMAILS = ['email1@example.com', 'email2@example.com', 'email3@example.com'];
     private const FILE_NAME = 'emails.txt';
 
     private string $tempDirectory;
-    private TxtDataProvider $txtDataProvider;
+    private TxtSubscriptionDataProvider $txtDataProvider;
 
     protected function setUp(): void
     {
@@ -24,8 +24,9 @@ class TxtDataProviderTest extends TestCase
         $this->tempDirectory = sys_get_temp_dir() . '/txt_data_provider_test';
         $filesystem->mkdir($this->tempDirectory);
 
-        $fileReader = new FileReader($this->tempDirectory, $filesystem);
-        $this->txtDataProvider = new TxtDataProvider($fileReader);
+        $logger = $this->createMock(LoggerInterface::class);
+        $fileReader = new FileReader($this->tempDirectory, $filesystem, $logger);
+        $this->txtDataProvider = new TxtSubscriptionDataProvider($fileReader);
     }
 
     protected function tearDown(): void

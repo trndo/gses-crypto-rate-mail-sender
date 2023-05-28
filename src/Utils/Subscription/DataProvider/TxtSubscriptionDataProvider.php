@@ -6,7 +6,7 @@ namespace App\Utils\Subscription\DataProvider;
 
 use App\Utils\FileSystem\FileReader;
 
-class TxtDataProvider implements DataProviderInterface
+class TxtSubscriptionDataProvider implements SubscriptionDataProviderInterface
 {
     public function __construct(
         private FileReader $fileReader,
@@ -16,7 +16,7 @@ class TxtDataProvider implements DataProviderInterface
     {
         $content = $this->fileReader->getContents('emails.txt');
 
-        return $content ? explode(',', $this->fileReader->getContents('emails.txt')) : [];
+        return $content ? explode(',', rtrim($content, ',')) : [];
     }
 
     public function ifEmailExists(string $email): bool

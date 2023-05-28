@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Utils\Subscription\Persister;
 
-interface DataPersisterInterface
+interface SubscriptionDataPersisterInterface
 {
     public function store(string $email): bool;
 }

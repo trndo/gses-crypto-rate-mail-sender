@@ -6,6 +6,7 @@ namespace App\Tests\FileSystem;
 
 use App\Utils\FileSystem\FileWriter;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -19,13 +20,16 @@ class FileWriterTest extends TestCase
 
     private string $tempDirectory;
 
+    private LoggerInterface $logger;
+
     protected function setUp(): void
     {
         $filesystem = new Filesystem();
         $this->tempDirectory = sys_get_temp_dir() . '/file_writer_test';
         $filesystem->mkdir($this->tempDirectory);
 
-        $this->fileWriter = new FileWriter($this->tempDirectory, $filesystem);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->fileWriter = new FileWriter($this->tempDirectory, $filesystem, $this->logger);
         $this->filesystemMock = $this->createMock(Filesystem::class);
     }
 
@@ -55,10 +59,10 @@ class FileWriterTest extends TestCase
             ->method('dumpFile')
             ->willThrowException(new IOException('Test exception'));
 
-        $fileWriter = new FileWriter($this->tempDirectory, $this->filesystemMock);
+        $fileWriter = new FileWriter($this->tempDirectory, $this->filesystemMock, $this->logger);
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage("An error occurred while creating the file at $fileName: Test exception");
+        $this->expectExceptionMessage('An error occurred while creating the file');
 
         $fileWriter->writeTo($fileName, $content);
     }
@@ -97,10 +101,10 @@ class FileWriterTest extends TestCase
             ->method('appendToFile')
             ->willThrowException(new IOException('Test exception'));
 
-        $fileWriter = new FileWriter($this->tempDirectory, $this->filesystemMock);
+        $fileWriter = new FileWriter($this->tempDirectory, $this->filesystemMock, $this->logger);
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage("An error occurred while appending data to the file at $fileName: Test exception");
+        $this->expectExceptionMessage('An error occurred while appending data to the file');
 
         $fileWriter->appendTo($fileName, $content);
     }
