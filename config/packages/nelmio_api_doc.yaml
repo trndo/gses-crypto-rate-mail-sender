@@ -1,0 +1,81 @@
+nelmio_api_doc:
+    models: { use_jms: false }
+    documentation:
+        info:
+            title: GSES2 BTC application
+            version: 1.0.0
+        servers:
+            - url: /api
+        tags:
+            - name: rate
+              description: Отримання поточного курсу BTC до UAH
+            - name: subscription
+              description: Робота з підпискою
+        paths:
+            /rate:
+                get:
+                    tags:
+                        - rate
+                    summary: Отримати поточний курс BTC до UAH
+                    description: >-
+                        Запит має повертати поточний курс BTC до UAH використовуючи будь-який
+                        third party сервіс з публічним АРІ
+                    operationId: rate
+                    responses:
+                        '200':
+                            description: Повертається актуальний курс BTC до UAH
+                            content:
+                                application/json:
+                                    schema:
+                                        type: number
+                        '400':
+                            description: Invalid status value
+                            content: { }
+            /subscribe:
+                post:
+                    tags:
+                        - subscription
+                    summary: Підписати емейл на отримання поточного курсу
+                    description: >-
+                        Запит має перевірити, чи немає данної електронної адреси в поточній базі
+                        даних (файловій) і, в разі її відсутності, записувати її. Пізніше, за
+                        допомогою іншого запиту ми будемо відправляти лист на ті електронні
+                        адреси, які будуть в цій базі.
+                    operationId: subscribe
+                    requestBody:
+                        content:
+                            application/x-www-form-urlencoded:
+                                schema:
+                                    required:
+                                        - email
+                                    properties:
+                                        email:
+                                            type: string
+                                            description: Електронна адреса, яку потрібно підписати
+                        required: true
+                    responses:
+                        '200':
+                            description: E-mail додано
+                            content: { }
+                        '409':
+                            description: Повертати, якщо e-mail вже є в базі даних (файловій)
+                            content: { }
+            /sendEmails:
+                post:
+                    tags:
+                        - subscription
+                    summary: Відправити e-mail з поточним курсом на всі підписані електронні пошти.
+                    description: >-
+                        Запит має отримувати актуальний курс BTC до UAH за допомогою third-party
+                        сервісу та відправляти його на всі електронні адреси, які були підписані
+                        раніше.
+                    operationId: sendEmails
+                    responses:
+                        '200':
+                            description: E-mailʼи відправлено
+                            content: { }
+        components: { }
+
+    areas: # to filter documented areas
+        default:
+            disable_default_routes: true

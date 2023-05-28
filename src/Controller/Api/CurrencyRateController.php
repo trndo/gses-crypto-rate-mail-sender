@@ -16,7 +16,7 @@ class CurrencyRateController
         private CurrencyRateComparatorInterface $rateComparator
     ) {}
 
-    #[Route('/rates')]
+    #[Route('/rate')]
     public function getRates(): JsonResponse
     {
         return new JsonResponse($this->rateComparator->compare(Currency::BTC, Currency::UAH));
