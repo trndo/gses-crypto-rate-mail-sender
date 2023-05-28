@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Utils\FileSystem;
 
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 class FileReader
 {
     public function __construct(
         private string $directory,
-        private Filesystem $filesystem
+        private Filesystem $filesystem,
+        private LoggerInterface $logger,
     ) {}
 
     public function getContents(string $fileName): ?string
@@ -22,7 +23,6 @@ class FileReader
             return null;
         }
 
-        //TODO change error handling Exception
         try {
             $contents = file_get_contents($filePath);
 
@@ -30,9 +30,8 @@ class FileReader
                 return null;
             }
         } catch (\Throwable $exception) {
-            throw new \InvalidArgumentException(
-                "An error occurred while reading the file at $fileName: " . $exception->getMessage()
-            );
+            $this->logger->info('Error while reading file ' . $filePath . 'Message: ' . $exception->getMessage());
+            throw new \InvalidArgumentException("An error occurred while reading the file");
         }
 
         return $contents;

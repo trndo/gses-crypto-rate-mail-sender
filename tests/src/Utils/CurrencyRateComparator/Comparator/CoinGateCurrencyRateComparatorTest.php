@@ -9,6 +9,8 @@ use App\Utils\CurrencyRateComparator\Currency;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CoinGateCurrencyRateComparatorTest extends TestCase
 {
@@ -22,20 +24,29 @@ class CoinGateCurrencyRateComparatorTest extends TestCase
         $this->rateComparator = new CoinGateCurrencyRateComparator($this->httpClient);
     }
 
-    protected function tearDown(): void
+    public function testCompareReturnsFloatRate(): void
     {
-        unset($this->httpClient, $this->rateComparator);
-    }
+        $rate = 979094.38;
 
-    public function testCompareReturnFloat(): void
-    {
-        $mockResponse = new MockResponse(json_encode(979094.38));
+        $mockResponse = new MockResponse(json_encode($rate));
         $this->httpClient->setResponseFactory($mockResponse);
 
         $result = $this->rateComparator->compare(Currency::BTC, Currency::UAH);
 
-        $this->assertNotNull($result);
-        $this->assertIsFloat($result);
-        $this->assertEquals(979094.38, $result);
+        $this->assertEquals($rate, $result);
+    }
+
+    public function testCompareThrowsBadRequestHttpException(): void
+    {
+        $errorMessage = 'An error occurred';
+
+        $mockResponse = new MockResponse([new \Exception($errorMessage)]);
+        $this->httpClient->setResponseFactory($mockResponse);
+
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionCode(Response::HTTP_BAD_REQUEST);
+        $this->expectExceptionMessage($errorMessage);
+
+        $this->rateComparator->compare(Currency::BTC, Currency::UAH);
     }
 }

@@ -6,65 +6,53 @@ namespace App\Tests\Utils\FileSystem;
 
 use App\Utils\FileSystem\FileReader;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 class FileReaderTest extends TestCase
 {
-    private const TEST_DATA_STRING_FROM_FILE = 'sample_data_string';
-    private const TEST_DATA_DIRECTORY = 'tests/data';
-
     private FileReader $fileReader;
+    private string $tempDirectory;
 
-    private ?Filesystem $fileSystem;
+    private Filesystem $filesystem;
+
+    private LoggerInterface $logger;
 
     protected function setUp(): void
     {
-        $this->fileSystem = $this->createMock(Filesystem::class);
-        $this->fileReader = new FileReader(self::TEST_DATA_DIRECTORY, $this->fileSystem);
+        $this->filesystem = new Filesystem();
+        $this->tempDirectory = sys_get_temp_dir() . '/file_reader_test';
+        $this->filesystem->mkdir($this->tempDirectory);
+
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->fileReader = new FileReader($this->tempDirectory, $this->filesystem, $this->logger);
+        $this->filesystem->mkdir($this->tempDirectory);
     }
 
     protected function tearDown(): void
     {
-        unset($this->fileSystem, $this->fileReader);
+        $filesystem = new Filesystem();
+        $filesystem->remove($this->tempDirectory);
     }
 
-    public function testReadFromExistingFile(): void
+    public function testGetContentsReturnsFileContents(): void
     {
         $fileName = 'test.txt';
+        $fileContents = 'Hello, World!';
 
-        $this->fileSystem->expects($this->once())
-            ->method('exists')
-            ->with(self::TEST_DATA_DIRECTORY . '/' . $fileName)
-            ->willReturn(true);
+        file_put_contents($this->tempDirectory . '/' . $fileName, $fileContents);
 
-       $result = $this->fileReader->getContents($fileName);
-       $this->assertEquals(self::TEST_DATA_STRING_FROM_FILE, $result);
+        $contents = $this->fileReader->getContents($fileName);
+
+        $this->assertEquals($fileContents, $contents);
     }
 
-    public function testReadFromNotExistingFile(): void
+    public function testGetContentsReturnsNullIfFileDoesNotExist(): void
     {
-        $fileName = 'test_1.txt';
+        $fileName = 'nonexistent.txt';
 
-        $this->fileSystem->expects($this->once())
-            ->method('exists')
-            ->with(self::TEST_DATA_DIRECTORY . '/' . $fileName)
-            ->willReturn(false);
+        $contents = $this->fileReader->getContents($fileName);
 
-        $result = $this->fileReader->getContents($fileName);
-        $this->assertEquals(null, $result);
-    }
-
-    public function testReadFromExistingFileThrowException(): void
-    {
-        $fileName = 'test_2.txt';
-
-        $this->expectException(\InvalidArgumentException::class);
-
-        $this->fileSystem->expects($this->once())
-            ->method('exists')
-            ->with(self::TEST_DATA_DIRECTORY . '/' . $fileName)
-            ->willReturn(true);
-
-        $this->fileReader->getContents($fileName);
+        $this->assertNull($contents);
     }
 }
