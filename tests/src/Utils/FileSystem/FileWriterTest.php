@@ -25,7 +25,7 @@ class FileWriterTest extends TestCase
     protected function setUp(): void
     {
         $filesystem = new Filesystem();
-        $this->tempDirectory = sys_get_temp_dir() . '/file_writer_test';
+        $this->tempDirectory = sys_get_temp_dir().'/file_writer_test';
         $filesystem->mkdir($this->tempDirectory);
 
         $this->logger = $this->createMock(LoggerInterface::class);
@@ -47,7 +47,7 @@ class FileWriterTest extends TestCase
         $filePath = $this->fileWriter->writeTo($fileName, $content);
 
         $this->assertFileExists($filePath);
-        $this->assertEquals($content, file_get_contents($filePath));
+        $this->assertSame($content, file_get_contents($filePath));
     }
 
     public function testWriteToThrowsExceptionOnFailure(): void
@@ -72,12 +72,12 @@ class FileWriterTest extends TestCase
         $fileName = self::TEST_FILE;
         $initialContent = 'Initial content';
         $appendedContent = 'Appended content';
-        $filePath = $this->tempDirectory . '/' . $fileName;
+        $filePath = $this->tempDirectory.'/'.$fileName;
         file_put_contents($filePath, $initialContent);
 
         $filePath = $this->fileWriter->appendTo($fileName, $appendedContent);
 
-        $this->assertEquals($initialContent . $appendedContent, file_get_contents($filePath));
+        $this->assertSame($initialContent.$appendedContent, file_get_contents($filePath));
     }
 
     public function testAppendToWritesNewFileIfNotExists(): void
@@ -88,7 +88,7 @@ class FileWriterTest extends TestCase
         $filePath = $this->fileWriter->appendTo($fileName, $content);
 
         $this->assertFileExists($filePath);
-        $this->assertEquals($content, file_get_contents($filePath));
+        $this->assertSame($content, file_get_contents($filePath));
     }
 
     public function testAppendToThrowsExceptionOnFailure(): void

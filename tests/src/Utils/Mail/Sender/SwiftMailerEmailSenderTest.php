@@ -50,7 +50,7 @@ class SwiftMailerEmailSenderTest extends TestCase
                     'to' => $message->getTo(),
                     'exception' => $exceptionMessage,
                 ]
-        );
+            );
 
         $this->emailSender->send($message);
     }

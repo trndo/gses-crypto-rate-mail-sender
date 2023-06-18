@@ -33,7 +33,7 @@ class CoinGateCurrencyRateComparatorTest extends TestCase
 
         $result = $this->rateComparator->compare(Currency::BTC, Currency::UAH);
 
-        $this->assertEquals($rate, $result);
+        $this->assertSame($rate, $result);
     }
 
     public function testCompareThrowsBadRequestHttpException(): void
