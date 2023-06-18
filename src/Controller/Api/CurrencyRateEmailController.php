@@ -20,7 +20,8 @@ class CurrencyRateEmailController
         private CurrencyRateComparatorInterface $rateComparator,
         private MailSenderInterface $mailSender,
         private PlainTextEmailMessageFactory $emailMessageFactory,
-    ) {}
+    ) {
+    }
 
     #[Route('/sendEmails', methods: 'POST')]
     public function sendRates(SubscriptionDataProviderInterface $dataProvider): JsonResponse
@@ -31,7 +32,7 @@ class CurrencyRateEmailController
         if (empty($subscribers)) {
             return new JsonResponse(
                 [
-                    'Emails were not found!'
+                    'Emails were not found!',
                 ],
                 Response::HTTP_NOT_FOUND
             );
@@ -39,13 +40,13 @@ class CurrencyRateEmailController
 
         $message = $this->emailMessageFactory->create(
             $subscribers,
-            'Dear subscriber, the current Bitcoin exchange rate in Hryvnia (UAH) is ' . $rate,
+            'Dear subscriber, the current Bitcoin exchange rate in Hryvnia (UAH) is '.$rate,
         );
         $this->mailSender->send($message);
 
         return new JsonResponse(
             [
-                'message' => 'Message was sent!'
+                'message' => 'Message was sent!',
             ]
         );
     }

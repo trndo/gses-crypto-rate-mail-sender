@@ -17,11 +17,13 @@ class SubscriptionController
 {
     public function __construct(
         private SubscriptionDataPersisterInterface $dataPersister,
-    ) {}
+    ) {
+    }
 
     #[Route('/subscribe', methods: 'POST')]
     public function write(Request $request, ValidatorInterface $validator): JsonResponse
     {
+        /** @var string $email */
         $email = $request->request->get('email');
 
         $errors = $validator->validate($email, new Email());

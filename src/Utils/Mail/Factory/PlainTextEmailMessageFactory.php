@@ -11,7 +11,8 @@ class PlainTextEmailMessageFactory
 {
     public function __construct(
         private ParameterBagInterface $parameterBag
-    ) {}
+    ) {
+    }
 
     public function create(array|string $to, string $body, string $from = null): Email
     {
@@ -23,6 +24,8 @@ class PlainTextEmailMessageFactory
             $email->to($to);
         }
 
-        return $email->from($from ?? $this->parameterBag->get('default_email'))->text($body);
+        $from = $from ?? (string) $this->parameterBag->get('default_email');
+
+        return $email->from($from)->text($body);
     }
 }

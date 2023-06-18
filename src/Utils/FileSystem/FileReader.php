@@ -13,25 +13,26 @@ class FileReader
         private string $directory,
         private Filesystem $filesystem,
         private LoggerInterface $logger,
-    ) {}
+    ) {
+    }
 
     public function getContents(string $fileName): ?string
     {
-        $filePath = $this->directory . '/' . $fileName;
+        $filePath = $this->directory.'/'.$fileName;
 
-        if (!$this->filesystem->exists($filePath)) {
+        if ( ! $this->filesystem->exists($filePath)) {
             return null;
         }
 
         try {
             $contents = file_get_contents($filePath);
 
-            if (!$contents) {
+            if ( ! $contents) {
                 return null;
             }
         } catch (\Throwable $exception) {
-            $this->logger->info('Error while reading file ' . $filePath . 'Message: ' . $exception->getMessage());
-            throw new \InvalidArgumentException("An error occurred while reading the file");
+            $this->logger->info('Error while reading file '.$filePath.'Message: '.$exception->getMessage());
+            throw new \InvalidArgumentException('An error occurred while reading the file');
         }
 
         return $contents;

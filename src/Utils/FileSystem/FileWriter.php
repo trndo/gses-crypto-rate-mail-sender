@@ -14,7 +14,8 @@ class FileWriter
         private readonly string $directory,
         private Filesystem $filesystem,
         private LoggerInterface $logger,
-    ) {}
+    ) {
+    }
 
     public function writeTo(string $fileName, string $content): string
     {
@@ -23,8 +24,8 @@ class FileWriter
         try {
             $this->filesystem->dumpFile($filePath, $content);
         } catch (IOExceptionInterface $exception) {
-            $this->logger->info('Error while creating the file ' . $filePath . 'Message: ' . $exception->getMessage());
-            throw new \InvalidArgumentException("An error occurred while creating the file");
+            $this->logger->info('Error while creating the file '.$filePath.'Message: '.$exception->getMessage());
+            throw new \InvalidArgumentException('An error occurred while creating the file');
         }
 
         return $filePath;
@@ -34,7 +35,7 @@ class FileWriter
     {
         $filePath = $this->composeFullFilePath($fileName);
 
-        if (!$this->filesystem->exists($filePath)) {
+        if ( ! $this->filesystem->exists($filePath)) {
             return $this->writeTo($fileName, $content);
         }
 
@@ -42,9 +43,9 @@ class FileWriter
             $this->filesystem->appendToFile($filePath, $content);
         } catch (IOExceptionInterface $exception) {
             $this->logger->info(
-                'Error while appending data to the file ' . $filePath . 'Message: ' . $exception->getMessage()
+                'Error while appending data to the file '.$filePath.'Message: '.$exception->getMessage()
             );
-            throw new \InvalidArgumentException("An error occurred while appending data to the file");
+            throw new \InvalidArgumentException('An error occurred while appending data to the file');
         }
 
         return $filePath;
@@ -52,6 +53,6 @@ class FileWriter
 
     private function composeFullFilePath(string $fileName): string
     {
-        return $this->directory . '/' . $fileName;
+        return $this->directory.'/'.$fileName;
     }
 }
