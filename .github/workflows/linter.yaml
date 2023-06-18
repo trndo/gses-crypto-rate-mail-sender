@@ -1,0 +1,37 @@
+name: Symfony
+
+on: [push, pull_request]
+
+permissions:
+  contents: write
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: ['8.2']
+    steps:
+      - uses: actions/checkout@v3
+      - name: Copy .env.local
+        run: php -r "file_exists('.env') || copy('.env.test.local');"
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+      - name: Install Dependencies
+        run: composer install --prefer-dist --no-interaction
+      - name: PHP CS Fixer src
+        run: vendor/bin/php-cs-fixer fix src --allow-risky=yes
+      - name: PHP CS Fixer tests
+        run: vendor/bin/php-cs-fixer fix tests --allow-risky=yes
+      - name: Psalm
+        run: vendor/bin/psalm --show-info=true
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: '[CI] Fix code style'
