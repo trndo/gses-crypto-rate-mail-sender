@@ -17,7 +17,8 @@ class CoinGateCurrencyRateComparator implements CurrencyRateComparatorInterface
 
     public function __construct(
         private HttpClientInterface $httpClient
-    ) {}
+    ) {
+    }
 
     public function compare(Currency $from, Currency $to): float
     {

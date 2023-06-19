@@ -12,7 +12,8 @@ class TxtSubscriptionDataPersister implements SubscriptionDataPersisterInterface
     public function __construct(
         private FileWriter $fileWriter,
         private SubscriptionDataProviderInterface $dataProvider
-    ) {}
+    ) {
+    }
 
     public function store(string $email): bool
     {
@@ -20,6 +21,6 @@ class TxtSubscriptionDataPersister implements SubscriptionDataPersisterInterface
             return false;
         }
 
-        return (bool) $this->fileWriter->appendTo('emails.txt', $email . ',');
+        return (bool) $this->fileWriter->appendTo('emails.txt', $email.',');
     }
 }

@@ -28,9 +28,9 @@ class PlainTextEmailMessageFactoryTest extends TestCase
 
         $email = $this->emailFactory->create($to, $body, $from);
 
-        $this->assertEquals($to, $email->getTo()[0]->getAddress());
-        $this->assertEquals($from, $email->getFrom()[0]->getAddress());
-        $this->assertEquals($body, $email->getTextBody());
+        $this->assertSame($to, $email->getTo()[0]->getAddress());
+        $this->assertSame($from, $email->getFrom()[0]->getAddress());
+        $this->assertSame($body, $email->getTextBody());
     }
 
     public function testCreateWithMultipleEmailAddresses(): void
@@ -46,9 +46,9 @@ class PlainTextEmailMessageFactoryTest extends TestCase
 
         $email = $this->emailFactory->create($to, $body);
 
-        $this->assertEquals($to, array_map(fn (Address $a) => $a->getAddress(), $email->getTo()));
-        $this->assertEquals($defaultFrom, $email->getFrom()[0]->getAddress());
-        $this->assertEquals($body, $email->getTextBody());
+        $this->assertSame($to, array_map(fn (Address $a) => $a->getAddress(), $email->getTo()));
+        $this->assertSame($defaultFrom, $email->getFrom()[0]->getAddress());
+        $this->assertSame($body, $email->getTextBody());
     }
 
     public function testCreateWithDefaultFromEmailAddress(): void
@@ -64,8 +64,8 @@ class PlainTextEmailMessageFactoryTest extends TestCase
 
         $email = $this->emailFactory->create($to, $body);
 
-        $this->assertEquals($to, $email->getTo()[0]->getAddress());
-        $this->assertEquals($defaultFrom, $email->getFrom()[0]->getAddress());
-        $this->assertEquals($body, $email->getTextBody());
+        $this->assertSame($to, $email->getTo()[0]->getAddress());
+        $this->assertSame($defaultFrom, $email->getFrom()[0]->getAddress());
+        $this->assertSame($body, $email->getTextBody());
     }
 }

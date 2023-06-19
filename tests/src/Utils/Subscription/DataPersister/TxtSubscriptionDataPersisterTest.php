@@ -20,7 +20,7 @@ class TxtSubscriptionDataPersisterTest extends TestCase
     protected function setUp(): void
     {
         $filesystem = new Filesystem();
-        $this->tempDirectory = sys_get_temp_dir() . '/txt_data_persister_test';
+        $this->tempDirectory = sys_get_temp_dir().'/txt_data_persister_test';
         $filesystem->mkdir($this->tempDirectory);
 
         $logger = $this->createMock(LoggerInterface::class);
@@ -53,9 +53,9 @@ class TxtSubscriptionDataPersisterTest extends TestCase
         $result = $this->txtDataPersister->store($email);
 
         $this->assertTrue($result);
-        $this->assertEquals(
-            $email . ',',
-            file_get_contents($this->tempDirectory . '/emails.txt')
+        $this->assertSame(
+            $email.',',
+            file_get_contents($this->tempDirectory.'/emails.txt')
         );
     }
 }

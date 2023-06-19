@@ -14,12 +14,13 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private ParameterBagInterface $parameterBag
-    ) {}
+    ) {
+    }
 
     public static function getSubscribedEvents(): array
     {
         return [
-            ExceptionEvent::class => 'onKernelException'
+            ExceptionEvent::class => 'onKernelException',
         ];
     }
 
@@ -29,9 +30,9 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
         $response = new JsonResponse(
             [
                 'message' => $exception->getMessage(),
-                'trace' => $this->parameterBag->get('env') === 'dev'
+                'trace' => 'dev' === $this->parameterBag->get('env')
                     ? $exception->getTraceAsString()
-                    : null
+                    : null,
             ],
             method_exists($exception, 'getStatusCode')
                 ? $exception->getStatusCode()

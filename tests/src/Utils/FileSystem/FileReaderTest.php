@@ -21,7 +21,7 @@ class FileReaderTest extends TestCase
     protected function setUp(): void
     {
         $this->filesystem = new Filesystem();
-        $this->tempDirectory = sys_get_temp_dir() . '/file_reader_test';
+        $this->tempDirectory = sys_get_temp_dir().'/file_reader_test';
         $this->filesystem->mkdir($this->tempDirectory);
 
         $this->logger = $this->createMock(LoggerInterface::class);
@@ -40,11 +40,11 @@ class FileReaderTest extends TestCase
         $fileName = 'test.txt';
         $fileContents = 'Hello, World!';
 
-        file_put_contents($this->tempDirectory . '/' . $fileName, $fileContents);
+        file_put_contents($this->tempDirectory.'/'.$fileName, $fileContents);
 
         $contents = $this->fileReader->getContents($fileName);
 
-        $this->assertEquals($fileContents, $contents);
+        $this->assertSame($fileContents, $contents);
     }
 
     public function testGetContentsReturnsNullIfFileDoesNotExist(): void

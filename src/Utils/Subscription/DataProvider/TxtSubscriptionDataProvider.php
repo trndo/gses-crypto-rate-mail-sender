@@ -10,7 +10,8 @@ class TxtSubscriptionDataProvider implements SubscriptionDataProviderInterface
 {
     public function __construct(
         private FileReader $fileReader,
-    ) {}
+    ) {
+    }
 
     public function getAll(): array
     {

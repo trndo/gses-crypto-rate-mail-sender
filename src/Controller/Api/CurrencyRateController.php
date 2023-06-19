@@ -14,7 +14,8 @@ class CurrencyRateController
 {
     public function __construct(
         private CurrencyRateComparatorInterface $rateComparator
-    ) {}
+    ) {
+    }
 
     #[Route('/rate')]
     public function getRates(): JsonResponse

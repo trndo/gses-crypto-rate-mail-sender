@@ -21,7 +21,7 @@ class TxtSubscriptionDataProviderTest extends TestCase
     protected function setUp(): void
     {
         $filesystem = new Filesystem();
-        $this->tempDirectory = sys_get_temp_dir() . '/txt_data_provider_test';
+        $this->tempDirectory = sys_get_temp_dir().'/txt_data_provider_test';
         $filesystem->mkdir($this->tempDirectory);
 
         $logger = $this->createMock(LoggerInterface::class);
@@ -55,19 +55,19 @@ class TxtSubscriptionDataProviderTest extends TestCase
     {
         $fileName = self::FILE_NAME;
         $content = implode(',', self::EMAILS);
-        $filePath = $this->tempDirectory . '/' . $fileName;
+        $filePath = $this->tempDirectory.'/'.$fileName;
         file_put_contents($filePath, $content);
 
         $emails = $this->txtDataProvider->getAll();
 
-        $this->assertEquals(self::EMAILS, $emails);
+        $this->assertSame(self::EMAILS, $emails);
     }
 
     public function testIfEmailExistsReturnsTrueIfEmailExists(): void
     {
         $fileName = 'emails.txt';
         $content = implode(',', self::EMAILS);
-        $filePath = $this->tempDirectory . '/' . $fileName;
+        $filePath = $this->tempDirectory.'/'.$fileName;
         file_put_contents($filePath, $content);
 
         $email = 'email2@example.com';
