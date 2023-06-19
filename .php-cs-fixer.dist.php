@@ -18,6 +18,9 @@ return (new PhpCsFixer\Config())
         'strict_comparison' => true,
         'strict_param' => true,
         'not_operator_with_space' => true,
+        'no_unused_imports' => true,
+        'class_attributes_separation' => false,
+        'phpdoc_separation' => false,
     ])
     ->setUsingCache(false)
     ->setFinder($finder)
